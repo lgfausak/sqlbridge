@@ -24,20 +24,18 @@ from setuptools import setup, find_packages
 
 
 LONGSDESC = """
-sqlbridge|Python sqlbridge for Autobahn
+sqlbridge|Web Socket sqlbridge for Autobahn
 
 More information:
 
-* `Autobahn Site <http://autobahn.ws/python>`__
-* `sqlbridge Site <http://autobahn.ws/python>`__
-* `Source Code <https://github.com/tavendo/AutobahnPython>`__
+* `sqlbridge Site <http://github.com/lgfausak/sqlbridge>`__
 """
 
-## get version string from "autobahn/__init__.py"
+## get version string from "__init__.py"
 ## See: http://stackoverflow.com/a/7071358/884770
 ##
 import re
-VERSIONFILE="autobahnaddons/__init__.py"
+VERSIONFILE="__init__.py"
 verstrline = open(VERSIONFILE, "rt").read()
 VSRE = r"^__version__ = ['\"]([^'\"]*)['\"]"
 mo = re.search(VSRE, verstrline, re.M)
@@ -50,14 +48,14 @@ else:
 ## Now install Autobahn ..
 ##
 setup(
-   name = 'autobahnaddons',
+   name = 'sqlbridge',
    version = verstr,
    description = 'Autobahn|Python add-ons.',
    long_description = LONGSDESC,
    license = 'Apache License 2.0',
-   author = 'AutobahnPython Contributors',
-   author_email = 'autobahnws@googlegroups.com',
-   url = 'http://autobahn.ws/python',
+   author = 'Greg Fausak',
+   author_email = 'lgfausak@gmail.com',
+   url = 'https://github.com/lgfausak/sqlbridge',
    platforms = 'Any',
    install_requires = ['autobahn>=0.9.2'],
    extras_require = {
@@ -66,8 +64,8 @@ setup(
    },
    entry_points = {
       'console_scripts': [
-         'sqlbridge = autobahnaddons.sqlbridge.cli:run',
-         'sqlcmd = autobahnaddons.sqlbridge.client:run',
+         'sqlbridge = sqlbridge.cli:run',
+         'sqlcmd = sqlbridge.client:run',
       ]},
    packages = find_packages(),
    include_package_data = True,
@@ -85,9 +83,6 @@ setup(
                   "Programming Language :: Python :: 2",
                   "Programming Language :: Python :: 2.6",
                   "Programming Language :: Python :: 2.7",
-                  "Programming Language :: Python :: 3",
-                  "Programming Language :: Python :: 3.3",
-                  "Programming Language :: Python :: 3.4",
                   "Programming Language :: Python :: Implementation :: CPython",
                   "Programming Language :: Python :: Implementation :: PyPy",
                   "Programming Language :: Python :: Implementation :: Jython",
@@ -98,5 +93,5 @@ setup(
                   "Topic :: Software Development :: Libraries",
                   "Topic :: Software Development :: Libraries :: Python Modules",
                   "Topic :: Software Development :: Object Brokering"],
-   keywords = 'autobahn autobahn.ws websocket realtime rfc6455 wamp rpc pubsub twisted asyncio'
+   keywords = 'autobahn websocket wamp rpc pubsub twisted database'
 )

@@ -29,7 +29,7 @@ from autobahn.wamp import types
 
 from autobahn import util
 
-from autobahnaddons.sqlbridge.twisted.dbengine import DB
+from sqlbridge.twisted.dbengine import DB
 
 
 
