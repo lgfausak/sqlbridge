@@ -64,8 +64,8 @@ setup(
    },
    entry_points = {
       'console_scripts': [
-         'sqlbridge = sqlbridge.cli:run',
-         'sqlcmd = sqlbridge.client:run',
+         'sqlbridge = sqlbridge.scripts.cli:run',
+         'sqlcmd = sqlbridge.scripts.client:run',
       ]},
    packages = find_packages(),
    include_package_data = True,
@@ -74,7 +74,7 @@ setup(
    ## http://pypi.python.org/pypi?%3Aaction=list_classifiers
    ##
    classifiers = ["License :: OSI Approved :: Apache Software License",
-                  "Development Status :: 5 - Production/Stable",
+                  "Development Status :: 2 - Pre-Alpha",
                   "Environment :: No Input/Output (Daemon)",
                   "Framework :: Twisted",
                   "Intended Audience :: Developers",
