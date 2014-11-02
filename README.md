@@ -4,22 +4,42 @@ Database Service for Autobahn
 
 ## Summary
 
-A simple database construct for Autobahn allowing for different implementations.
+A simple database access mechanism for Autobahn.  This mechanism operates in two ways.
+* management mode
+* operating mode
 
-Command to start database engine:
+### management mode
+Management mode provides an Autobahn component that you can run giving you the ability to
+create database services (operating modes) on the fly.  In this mode you simply get access
+to 2 rpc calls:
+* adm.db.start
+start a new database bridge.
+* adm.db.stop
+stop a database bridge.
+When run in this mode no database access is provided.  Instead, the service registers rpc calls for the 
+administration of database bridges.
+
+Command to start database bridge:
 
 ```python
-from autobahn.twisted.dbengine import DB
 yield self.call('adm.db.start', 'DRIVER', 'topic_root')
 ```
 
 valid DRIVERs are:
-* PG9\_4	Postgres version v9.4b2 (PG alias)
+* PG9\_4	Postgres version v9.4b3 (PG alias)
 * MYSQL14\_14	Mysql v14.14 (MYSQL alias)
 * SQLITE3\_3\_8\_2	sqlite3 v3.8.2 (SQLITE alias)
 
+valid topic_root would be the registration root.  As an example we can use 'com.db'.
 what this does is set up the rpc with a prefix of com.db, and calls named:
-connect, disconnect, query, operation, watch for the database engine.
+connect, disconnect, query, operation, watch for the database engine. A complete example:
+
+```python
+yield self.call('adm.db.start', 'PG', 'com.db')
+```
+
+After calling adm.db.start you would have a new database bridge at com.db. 
+
 The rpc calls in this example would be :
 
 * com.db.connect    start a postgres connection, the dsn is passed, dsn in psycopg2 format
@@ -31,8 +51,8 @@ The rpc calls in this example would be :
 The class also has a main routine which will connect to your Autobahn realm as required.  There is a convenience startup feature in the main routine to establish a connection with a database if desired.
 
 ```
-./dbengine.py --help yields:
-usage: dbengine.py [-h] [-w WSOCKET] [-r REALM] [-v] [-u USER] [-s PASSWORD]
+sqlbridge --help yields:
+usage: sqlbridge [-h] [-w WSOCKET] [-r REALM] [-v] [-u USER] [-s PASSWORD]
              [-e ENGINE] [-d DSN] [-t TOPIC_BASE]
 
 db admin manager for autobahn

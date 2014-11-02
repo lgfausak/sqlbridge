@@ -32,6 +32,16 @@ from autobahn import util
 from sqlbridge.twisted.dbengine import DB
 
 
+import argparse
+
+# http://stackoverflow.com/questions/3853722/python-argparse-how-to-insert-newline-the-help-text
+class SmartFormatter(argparse.HelpFormatter):
+
+    def _split_lines(self, text, width):
+        # this is the RawTextHelpFormatter._split_lines
+        if text.startswith('R|'):
+            return text[2:].splitlines()  
+        return argparse.HelpFormatter._split_lines(self, text, width)
 
 def run():
     prog = os.path.basename(__file__)
@@ -42,7 +52,8 @@ def run():
     def_realm = 'realm1'
     def_topic_base = 'com.db'
 
-    p = argparse.ArgumentParser(description="db admin manager for autobahn")
+    # http://stackoverflow.com/questions/3853722/python-argparse-how-to-insert-newline-the-help-text
+    p = argparse.ArgumentParser(description="db admin manager for autobahn", formatter_class=SmartFormatter)
 
     p.add_argument('-w', '--websocket', action='store', dest='wsocket', default=def_wsocket,
                         help='web socket definition, default is: '+def_wsocket)
@@ -59,8 +70,9 @@ def run():
                              ' Note engine is rooted on --topic.' +
                              ' Valid engine options are PG, MYSQL or SQLITE')
     p.add_argument('-d', '--dsn', action='store', dest='dsn', default=None,
-                        help='if specified the database in dsn will be connected and ready.' +
+                        help='R|if specified the database in dsn will be connected and ready.\n' +
                              'dsns are unique to the engine being used.  Valid examples:' +
+                             '\n-----------' +
                              '\nPG: dbname=autobahn host=192.168.200.230 user=autouser password=testpass' +
                              '\nMYSQL: database=autobahn user=autouser password=passtest' +
                              '\nSQLITE: Z')
