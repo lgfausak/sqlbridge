@@ -35,7 +35,7 @@ More information:
 ## See: http://stackoverflow.com/a/7071358/884770
 ##
 import re
-VERSIONFILE="__init__.py"
+VERSIONFILE="sqlbridge/__init__.py"
 verstrline = open(VERSIONFILE, "rt").read()
 VSRE = r"^__version__ = ['\"]([^'\"]*)['\"]"
 mo = re.search(VSRE, verstrline, re.M)
@@ -45,12 +45,12 @@ else:
    raise RuntimeError("Unable to find version string in %s." % (VERSIONFILE,))
 
 
-## Now install Autobahn ..
+## Now install sqlbridge ..
 ##
 setup(
    name = 'sqlbridge',
    version = verstr,
-   description = 'Autobahn|Python add-ons.',
+   description = 'sql bridge for Autobahn|Python.',
    long_description = LONGSDESC,
    license = 'Apache License 2.0',
    author = 'Greg Fausak',
@@ -69,7 +69,10 @@ setup(
       ]},
    packages = find_packages(),
    include_package_data = True,
-   data_files = [('.', ['LICENSE'])],
+   package_data = {
+       "sqlbridge": [ "LICENSE", ]
+   },
+   #data_files = [('.', ['sqlbridge/LICENSE'])],
    zip_safe = True,
    ## http://pypi.python.org/pypi?%3Aaction=list_classifiers
    ##
