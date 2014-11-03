@@ -31,7 +31,6 @@ from autobahn import util
 
 from sqlbridge.twisted.dbengine import DB
 
-
 import argparse
 
 # http://stackoverflow.com/questions/3853722/python-argparse-how-to-insert-newline-the-help-text

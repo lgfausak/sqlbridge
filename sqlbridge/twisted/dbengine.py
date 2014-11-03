@@ -17,6 +17,8 @@
 ##
 ###############################################################################
 
+from __future__ import absolute_import
+
 import sys,os,argparse,six
 
 from twisted.python import log

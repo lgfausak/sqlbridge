@@ -23,13 +23,15 @@
 ## be called or instantiated independent of that class.
 ###############################################################################
 
+from __future__ import absolute_import
+
 import sys,os
 import sqlite3
 from twisted.enterprise import adbapi
 from twisted.python import log
 from twisted.internet.defer import inlineCallbacks, returnValue
 
-from dbbase import dbbase
+from .dbbase import dbbase
 
 class SQLITE3_3_8_2(dbbase):
     """

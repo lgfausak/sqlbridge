@@ -26,6 +26,7 @@
 ## and adding the new class to db.py
 ###############################################################################
 
+from __future__ import absolute_import
 from abc import ABCMeta, abstractmethod
 
 class dbbase(object):

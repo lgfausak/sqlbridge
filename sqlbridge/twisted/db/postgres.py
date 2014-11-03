@@ -23,6 +23,7 @@
 ## be called or instantiated independent of that class.
 ###############################################################################
 
+from __future__ import absolute_import
 import sys,os,string,random
 import six
 import psycopg2
@@ -33,7 +34,7 @@ from txpostgres import txpostgres
 from twisted.python import log
 from twisted.internet.defer import inlineCallbacks, returnValue
 
-from dbbase import dbbase
+from .dbbase import dbbase
 
 def rdc(*args, **kwargs):
     kwargs['connection_factory'] = psycopg2.extras.RealDictConnection

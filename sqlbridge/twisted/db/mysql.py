@@ -23,13 +23,14 @@
 ## be called or instantiated independent of that class.
 ###############################################################################
 
+from __future__ import absolute_import
 import sys,os
 import MySQLdb
 from twisted.enterprise import adbapi
 from twisted.python import log
 from twisted.internet.defer import inlineCallbacks, returnValue
 
-from dbbase import dbbase
+from .dbbase import dbbase
 
 class MYSQL14_14(dbbase):
     """
