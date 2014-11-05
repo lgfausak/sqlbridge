@@ -94,14 +94,14 @@ class DB(ApplicationSession):
 
         if 'engine' in self.svar and 'topic_base' in self.svar:
             if self.svar['engine'] == 'PG9_4' or self.svar['engine'] == 'PG':
-                import db.postgres
-                dbo = db.postgres.PG9_4(topic_base = self.svar['topic_base'], app_session = self, debug = self.svar['debug'])
+                from .db import postgres
+                dbo = postgres.PG9_4(topic_base = self.svar['topic_base'], app_session = self, debug = self.svar['debug'])
             elif self.svar['engine'] == 'MYSQL14_14' or self.svar['engine'] == 'MYSQL':
-                import db.mysql
-                dbo = db.mysql.MYSQL14_14(topic_base = self.svar['topic_base'], app_session = self, debug = self.svar['debug'])
+                from .db import mysql
+                dbo = mysql.MYSQL14_14(topic_base = self.svar['topic_base'], app_session = self, debug = self.svar['debug'])
             elif self.svar['engine'] == 'SQLITE3_3_8_2' or self.svar['engine'] == 'SQLITE3' or self.svar['engine'] == 'SQLITE':
-                import db.ausqlite3
-                dbo = db.ausqlite3.SQLITE3_3_8_2(topic_base = self.svar['topic_base'], app_session = self, debug = self.svar['debug'])
+                from .db import ausqlite3
+                dbo = ausqlite3.SQLITE3_3_8_2(topic_base = self.svar['topic_base'], app_session = self, debug = self.svar['debug'])
             else:
                 raise Exception("Unsupported dbtype {} ".format(self.svar['engine']))
         else:
