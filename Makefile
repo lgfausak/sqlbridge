@@ -11,6 +11,10 @@ all:
 incver:
 	( grep -v '^__version__' $(VFILE); nv=`(cat $(VFILE); echo 'p = __version__.split(".")'; echo 'p[len(p)-1]=str(int(p[len(p)-1])+1)'; echo 'print ".".join(p)';)   | python`; echo '__version__ = "'$$nv'"') > $(TFILE); mv $(TFILE) $(VFILE)
 
-
+#
+# this will increment the __version__ number in the module's __init__.py file
+# also, the file will be uploaded to pypi with the new version
+#
 pypi:
+	( grep -v '^__version__' $(VFILE); nv=`(cat $(VFILE); echo 'p = __version__.split(".")'; echo 'p[len(p)-1]=str(int(p[len(p)-1])+1)'; echo 'print ".".join(p)';)   | python`; echo '__version__ = "'$$nv'"') > $(TFILE); mv $(TFILE) $(VFILE)
 	python setup.py sdist upload
