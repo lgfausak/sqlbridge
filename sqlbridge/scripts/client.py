@@ -94,11 +94,15 @@ class Component(ApplicationSession):
 
         # query, operation or watch
         try:
-            result = yield self.call(self.svar['topic_base'] + '.' + self.svar['db_call'], self.svar['db_args'])
+            rv = yield self.call(self.svar['topic_base'] + '.' + self.svar['db_call'], self.svar['db_query'], self.svar['db_args'])
+            #rv = yield self.call('com.db.query', 'select 1', {})
         except Exception as err:
             log.msg("db:onJoin error {}".format(err))
+            raise err
         else:
             print("db:onJoin result(SUCCESS) : {}").format(json.dumps(rv,indent=4))
+
+        self.disconnect()
 
     def onLeave(self, details):
         print("onLeave: {}").format(details)
