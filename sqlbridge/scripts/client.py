@@ -91,18 +91,32 @@ class Component(ApplicationSession):
     @inlineCallbacks
     def onJoin(self, details):
         log.msg("db:onJoin session attached {}".format(details))
+        dcon = False
 
         # query, operation or watch
         try:
-            rv = yield self.call(self.svar['topic_base'] + '.' + self.svar['db_call'], self.svar['db_query'], self.svar['db_args'])
-            #rv = yield self.call('com.db.query', 'select 1', {})
+            rv = yield self.call(self.svar['topic_base'] + '.' + self.svar['db_call'],
+                    self.svar['db_query'], self.svar['db_args'])
         except Exception as err:
             log.msg("db:onJoin error {}".format(err))
             raise err
         else:
-            print("db:onJoin result(SUCCESS) : {}").format(json.dumps(rv,indent=4))
+            if self.svar['db_call'] == 'query':
+                print("db:onJoin query(SUCCESS) : {}").format(json.dumps(rv,indent=4))
+                dcon = True
+            elif self.svar['db_call'] == 'operation':
+                print("db:onJoin operation(SUCCESS)")
+                dcon = True
+            elif self.svar['db_call'] == 'watch':
+                print("db:onJoin watch(SUCCESS) : subscribing to: {}").format(rv)
+                rv = yield self.subscribe(callback_function, rv)
+            else:
+                log.msg("db:onJoin error, don't know db_call : {}".format(db_call))
+                dcon = True
 
-        self.disconnect()
+        if dcon:
+            log.msg("db:onJoin disconnecting : {}")
+            self.disconnect()
 
     def onLeave(self, details):
         print("onLeave: {}").format(details)
