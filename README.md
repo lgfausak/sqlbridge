@@ -133,11 +133,11 @@ optional arguments:
                         {}
 ```
 
-### Generic examples
+### Generic Postgres examples
 
-* to select all tuples from a table
+* select all tuples from a table
 ```sh
-sqlcmd -t com.db -c query -q 'select * from login'
+sqlcmd -t com.db -c query -q "select * from login"
 [
     {
         "modified_timestamp": "2014-09-29 10:25:52.38656-05", 
@@ -158,4 +158,8 @@ sqlcmd -t com.db -c query -q 'select * from login'
         "fullname": "Greg Fausak"
     }
 ]
+```
+* update a tuple
+```sh
+sqlcmd -t com.db -c operation -q "update login set tzname = 'America/New_York' where id = 3"
 ```
