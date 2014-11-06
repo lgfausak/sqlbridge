@@ -150,7 +150,7 @@ def run():
     def_db_query = 'select 1'
     def_db_args = '{}'
 
-    p = argparse.ArgumentParser(description="db admin manager for autobahn")
+    p = argparse.ArgumentParser(description="sql bridge for Autobahn")
 
     p.add_argument('-w', '--websocket', action='store', dest='wsocket', default=def_wsocket,
                         help='web socket definition, default is: '+def_wsocket)
