@@ -182,7 +182,19 @@ sqlcmd -t com.db -c query -q "update login set tzname = %(tzname)s where id = %(
     }
 ]
 ```
-* watch for changes.  This example is going to be a little contrived.
+* watch for changes. Easy example.
+```sh
+sqlcmd -t com.db -c watch -q "testme"
+```
+Then, on another sqlcmd client connected to the same Autobahn router and realm:
+```sh
+sqlcmd -c operation -q "notify testme, 'this is a test'"
+```
+Back at the original watch command, we see:
+```sh
+watch: this is a test
+```
+* watch for changes. (a use case).  This example is going to be a little contrived.
 Lets say you have a login table in your database (like I do).
 And lets further say you have a trigger on that table that will NOTIFY LOGINCHANGE everytime a tuple
 is inserted, updated or deleted from that table. How to do all that is beyond the scope of
@@ -194,7 +206,7 @@ sqlcmd -t com.db -c watch -q "LOGINCHANGE"
 When I run that command the linux prompt does not immediately return, it just sits there.  Then, in another window, I run that
 SQL update command setting the tzname to America/New_York. Then, back in this example I see:
 ```sh
-NOTIFY loginchange, payload:
+watch:
 [
     {
         "table": "login",
@@ -211,5 +223,5 @@ NOTIFY loginchange, payload:
 ```
 Note that the payloads, and notify are completely under database control.  This becomes much more important
 for session and authorization management.  The main idea here is that clients can communicate through database
-notifications.
-
+notifications.  It doesn't make much sense to use the sqlcmd example script to watch for changes, but, you can
+see how you might use it in an application.
