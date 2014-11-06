@@ -159,7 +159,57 @@ sqlcmd -t com.db -c query -q "select * from login"
     }
 ]
 ```
-* update a tuple
+* update a tuple (note the -c operation because no results are expected)
 ```sh
 sqlcmd -t com.db -c operation -q "update login set tzname = 'America/New_York' where id = 3"
 ```
+* update a tuple (a better way)
+```sh
+sqlcmd -t com.db -c operation -q "update login set tzname = %(tzname)s where id = %(id)s" -a '{"tzname":"America/New_York","id":3}'
+```
+* update a tuple (an even better way) (note the -c query, and the returning \*)
+```sh
+sqlcmd -t com.db -c query -q "update login set tzname = %(tzname)s where id = %(id)s returning *" -a '{"tzname":"America/New_York","id":3}'
+[
+    {
+        "modified_timestamp": "2014-11-06 12:49:23.720764-06", 
+        "modified_by_user": "0", 
+        "id": "3", 
+        "tzname": "America/New_York", 
+        "login": "db", 
+        "password": "dbsecret", 
+        "fullname": "db access"
+    }
+]
+```
+* watch for changes.  This example is going to be a little contrived.
+Lets say you have a login table in your database (like I do).
+And lets further say you have a trigger on that table that will NOTIFY LOGINCHANGE everytime a tuple
+is inserted, updated or deleted from that table. How to do all that is beyond the scope of
+this example. So, with my sqlcmd I can 'watch' the LOGINCHANGE notification and subscribe to
+changes to it.  Like this:
+```sh
+sqlcmd -t com.db -c watch -q "LOGINCHANGE"
+```
+When I run that command the linux prompt does not immediately return, it just sits there.  Then, in another window, I run that
+SQL update command setting the tzname to America/New_York. Then, back in this example I see:
+```sh
+NOTIFY loginchange, payload:
+[
+    {
+        "table": "login",
+        "op": "update",
+        "modified_timestamp": "2014-11-06 12:49:23.720764-06", 
+        "modified_by_user": "0", 
+        "id": "3", 
+        "tzname": "America/New_York", 
+        "login": "db", 
+        "password": "dbsecret", 
+        "fullname": "db access"
+    }
+]
+```
+Note that the payloads, and notify are completely under database control.  This becomes much more important
+for session and authorization management.  The main idea here is that clients can communicate through database
+notifications.
+
