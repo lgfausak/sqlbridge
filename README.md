@@ -1,13 +1,37 @@
 # sqlbridge - Autobahn Database Service
 
-Database Service for Autobahn
+SQL Bridge for Autobahn
 
 ## Summary
 
 A simple database access component for Autobahn. This component builds bridges to database backends making
 them accessible to Autobahn via topics.  The component can be used in its raw form to build custom
 Autobahn deployments, or, the convenience scripts that haver been included can be used to
-connect an sqlbridge to an already operating Autobahn router.
+connect an sqlbridge to an already operating Autobahn router.  There are two test scripts included in
+this distrubution, sqlbridge and sqlcmd. Brief documentation for each follows. The service
+concept here is (in beautiful ascii art):
+
+```
++--------+      +----------+      +-----------+      +---------+
+| sqlcmd |<---->| Autobahn |<---->| sqlbridge |<---->| your db |
+| client |      | Router   |      |  client   |      | server  |
++--------+      +----------+      +-----------+      +---------+
+```
+
+Before sqlcmd (or any client wanting to access the database) can run, first you need:
+* A database (postgres, mysql, sqlite).  Installation and feeding beyond the scope
+of this documentation.  One thing to note, the database need not be installed
+on the sqlbridge client, as long as the sqlbridge client can reach it
+via whatever connection mechanism the db server supports.
+* An Autobahn router to connect to.  This can be any router that allows either unchallenged
+connectivity, or, wampcra connectivity.
+* Once the above two are satisfied, then sqlbridge can be fired up, connecting the Autobahn
+router to the db server.
+* Finally, once the above three are done, then sqlcmd (or any client) can query
+the db server via the sqlbridge.
+So without further ado...
+
+
 
 Command to start database bridge:
 
