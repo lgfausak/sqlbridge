@@ -84,7 +84,7 @@ connect, disconnect, query, operation, watch for the database engine. A complete
 ```sh
 sqlbridge -v -e PG -t 'com.db' -d 'dbname=autobahn host=192.168.200.230 user=autouser'
 or
-sqlbridge -e MYSQL -t 'com.db' -d 'database=autobahn user=root'
+sqlbridge -e MYSQL -t 'com.db' -d 'db=autobahn user=root'
 or
 sqlbridge -e SQLITE -t 'com.db' -d 'database=/tmp/ab'
 ```
