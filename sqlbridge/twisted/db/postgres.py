@@ -241,7 +241,7 @@ class PG9_4(dbbase):
     @inlineCallbacks
     def watch(self,*args,**kwargs):
         log.msg("PG9_4:watch() ARGS:{} KWARGS:{}".format(args, kwargs))
-        word = args[0]
+        word = args[0].lower()
         if self.conn is None:
             raise Exception("cannot add watch because there is no connection {}".format(word))
 

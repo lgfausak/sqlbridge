@@ -88,6 +88,14 @@ class Component(ApplicationSession):
         else:
             raise Exception("don't know how to compute challenge for authmethod {}".format(challenge.method))
 
+    def watch_callback_function(self, details):
+        log.msg("watch: {}".format(details))
+        print("watch: {}").format(details)
+
+        self.disconnect()
+
+        return
+
     @inlineCallbacks
     def onJoin(self, details):
         log.msg("db:onJoin session attached {}".format(details))
@@ -99,17 +107,18 @@ class Component(ApplicationSession):
                     self.svar['db_query'], self.svar['db_args'])
         except Exception as err:
             log.msg("db:onJoin error {}".format(err))
-            raise err
+            dcon = True
         else:
             if self.svar['db_call'] == 'query':
-                print("db:onJoin query(SUCCESS) : {}").format(json.dumps(rv,indent=4))
+                log.msg("db:onJoin query(SUCCESS) : {}".format(json.dumps(rv,indent=4)))
+                print("{}").format(json.dumps(rv,indent=4))
                 dcon = True
             elif self.svar['db_call'] == 'operation':
-                print("db:onJoin operation(SUCCESS)")
+                log.msg("db:onJoin operation(SUCCESS)")
                 dcon = True
             elif self.svar['db_call'] == 'watch':
-                print("db:onJoin watch(SUCCESS) : subscribing to: {}").format(rv)
-                rv = yield self.subscribe(callback_function, rv)
+                log.msg("db:onJoin watch(SUCCESS) : subscribing to: {}".format(rv))
+                rv = yield self.subscribe(self.watch_callback_function, rv)
             else:
                 log.msg("db:onJoin error, don't know db_call : {}".format(db_call))
                 dcon = True
