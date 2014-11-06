@@ -103,6 +103,10 @@ class Component(ApplicationSession):
 
         # query, operation or watch
         try:
+            log.msg("topic_base: {}".format(self.svar['topic_base']))
+            log.msg("db_call: {}".format(self.svar['db_call']))
+            log.msg("db_query: {}".format(self.svar['db_query']))
+            log.msg("db_args: {}".format(self.svar['db_args']))
             rv = yield self.call(self.svar['topic_base'] + '.' + self.svar['db_call'],
                     self.svar['db_query'], self.svar['db_args'])
         except Exception as err:

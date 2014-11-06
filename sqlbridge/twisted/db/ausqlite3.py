@@ -133,7 +133,7 @@ class SQLITE3_3_8_2(dbbase):
     #
 
     @inlineCallbacks
-    def operation(self,s,a):
+    def operation(self,*args,**kwargs):
         log.msg("SQLITE3_3_8_2:operation({},{})".format(args,kwargs))
         s = args[0]
         a = args[1]

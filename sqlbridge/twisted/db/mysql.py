@@ -111,7 +111,8 @@ class MYSQL14_14(dbbase):
         if self.conn:
             try:
                 log.msg("MYSQL14_14:query().running({} with args {})".format(s,a))
-                rv = yield self.conn.runQuery(s,a)
+                #rv = yield self.conn.runQuery(s,a)
+                rv = yield self.conn.runQuery(s)
                 log.msg("MYSQL14_14:query().results({})".format(rv))
                 returnValue(rv)
             except Exception as err:
@@ -133,7 +134,7 @@ class MYSQL14_14(dbbase):
     #
 
     @inlineCallbacks
-    def operation(self,s,a):
+    def query(self,*args, **kwargs):
         log.msg("MYSQL14_14:operation() ARGS:{} KWARGS:{}".format(args, kwargs))
         s = args[0]
         a = args[1]
