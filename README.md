@@ -31,7 +31,7 @@ router to the db server.
 the db server via the sqlbridge.
 So without further ado...
 
-
+## sqlbridge
 
 Command to start database bridge:
 
@@ -94,26 +94,68 @@ There are two other rpcs created as well, but, they are not needed in this conte
 * com.db.connect    connect to a different db
 * com.db.disconnect disconnect from a db
 
-# Basic Documentation
 
-## com.db.connect dsn
+## sqlcmd
 
-Connect to a database.  The dsn is formatted like the database driver requires (it is different for each type).  There are engine specific arguments, most of which can be seen in the example above.
+Simple command line execution of sqlbridge topics
 
-## com.db.disconnect
+```
+usage: sqlcmd [-h] [-w WSOCKET] [-r REALM] [-v] [-u USER] [-s PASSWORD]
+              [-t TOPIC_BASE] [-c DB_CALL] [-q DB_QUERY] [-a DB_ARGS]
 
-Disconnect from the currently connected database.
+sql bridge for Autobahn
 
-## com.db.query query args
+optional arguments:
+  -h, --help            show this help message and exit
+  -w WSOCKET, --websocket WSOCKET
+                        web socket definition, default is:
+                        ws://127.0.0.1:8080/ws
+  -r REALM, --realm REALM
+                        connect to websocket using realm, default is: realm1
+  -v, --verbose         Verbose logging for debugging
+  -u USER, --user USER  connect to websocket as user, default is: client
+  -s PASSWORD, --secret PASSWORD
+                        users "secret" password
+  -t TOPIC_BASE, --topic TOPIC_BASE
+                        your query will be executed against this topic base,
+                        the default: com.db
+  -c DB_CALL, --call DB_CALL
+                        this is concatenated with topic_base after prepending
+                        a dot, default : query
+  -q DB_QUERY, --query DB_QUERY
+                        this is the first argument to db_call, if db_call is
+                        operation or query then this is the sql query to run.
+                        If the operation is watch then this is the LISTEN to
+                        watch : select 1
+  -a DB_ARGS, --args DB_ARGS
+                        if your query requires arguments they can be specified
+                        in json format here, default is a blank dictionary :
+                        {}
+```
 
-Run query on the database.  Argument substitution with supplied arguments.  Depending on the database the query will look different.  For example, postgres uses the realdictcursor, so inline substitution is done with %(name)s tags. Sqlite3 uses tags that look like :name. The result of the query is an array of dictionary rows.
+### Generic examples
 
-## com.db.operation query args
-
-Run an operation.  The difference between an operation and a query is that an operation does not expect an answer (like an insert statement).
-
-## com.db.watch name
-
-This function is only valid on a postgres database.  Postgres has a notify/listen feature that provides for async notification that something has happened in the database.  This watch function sets up a 'LISTEN' for one of these notifications.  When called, watch will create a new publication rooted on com.db.watch with an arbitrary random name. For example, say I want to know any time the employee data changes.  I do something like: sub\_topic = yield my\_app.call('com.db.watch','employee\_change').  This will return a topic string like com.db.watch.abcdefghij (random lower case characters).  I then subscribe to that.  Anytime a database client issues a NOTIFY employee\_change my subscription will get published with the payload.
-
-
+* to select all tuples from a table
+```postgres
+sqlcmd -t com.db -c query -q 'select * from login'
+[
+    {
+        "modified_timestamp": "2014-09-29 10:25:52.38656-05", 
+        "modified_by_user": "2", 
+        "id": "3", 
+        "tzname": "America/Chicago", 
+        "login": "db", 
+        "password": "dbsecret", 
+        "fullname": "db access"
+    }, 
+    {
+        "modified_timestamp": "2014-09-29 10:25:52.38656-05", 
+        "modified_by_user": "2", 
+        "id": "10", 
+        "tzname": "America/Chicago", 
+        "login": "greg", 
+        "password": "123test", 
+        "fullname": "Greg Fausak"
+    }
+]
+```
