@@ -74,8 +74,8 @@ valid DRIVERs are:
 
 Disclosure.  Although these are valid drivers I use Postgres.  I only created the other drivers as
 a proof of concept to make sure that this would work for other database platforms.
-However, I don't care about those other platforms so their implementation / testing may
-lag behind.
+I don't particularly care about those other platforms so their implementation / testing may
+lag behind. I will try to keep them working :-)
 
 valid topic_root would be the registration root.  As an example we can use 'com.db'.
 what this does is set up the rpc with a prefix of com.db, and calls named:
@@ -99,6 +99,8 @@ There are two other rpcs created as well, but, they are not needed in this conte
 * com.db.connect    connect to a different db
 * com.db.disconnect disconnect from a db
 
+Note: I am reserving the namespace from the declared topic_base. I will be adding other entry points,
+so don't use, for example, com.db.mystuff if you plan on using sqlbridge.
 
 ## sqlcmd
 
