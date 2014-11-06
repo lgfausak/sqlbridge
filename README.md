@@ -72,6 +72,11 @@ valid DRIVERs are:
 * MYSQL14\_14	Mysql v14.14 (MYSQL)
 * SQLITE3\_3\_8\_2	sqlite3 v3.8.2 (SQLITE)
 
+Disclosure.  Although these are valid drivers I use Postgres.  I only created the other drivers as
+a proof of concept to make sure that this would work for other database platforms.
+However, I don't care about those other platforms so their implementation / testing may
+lag behind.
+
 valid topic_root would be the registration root.  As an example we can use 'com.db'.
 what this does is set up the rpc with a prefix of com.db, and calls named:
 connect, disconnect, query, operation, watch for the database engine. A complete example:
