@@ -136,7 +136,7 @@ optional arguments:
 ### Generic examples
 
 * to select all tuples from a table
-```postgres
+```sh
 sqlcmd -t com.db -c query -q 'select * from login'
 [
     {
