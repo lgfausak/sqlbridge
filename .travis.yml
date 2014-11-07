@@ -18,6 +18,7 @@ before_script:
 script:
   - nosetests
   - sqlcmd -v -c operation -t 'com.pg' -q 'insert into login (password,fullname,login,tzname)values(%(p)s,%(f)s,%(l)s,%(t)s)' -a '{"p":"123test","f":"New User","l":"noob3","t":"America/Chicago"}'
+  - sqlcmd -v -c query -t 'com.pg' -q 'select * from login'
 branches:
   only:
     - master
