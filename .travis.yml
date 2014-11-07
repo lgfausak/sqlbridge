@@ -4,12 +4,20 @@ services:
 python:
   - "2.7"
 # command to install dependencies
-install: "pip install -r requirements.txt"
+install:
+  - "pip install -r requirements.txt"
+  - python setup.py install
 before_script:
   - mysql -e 'create database autobahn;'
   - psql -c 'create database autobahn' -U postgres
+  - psql -c 'create table login (id SERIAL, login TEXT UNIQUE, fullname TEXT, password TEXT, tzname TEXT, PRIMARY KEY (id))' -U postgres autobahn
+  - sqlrouter
+  - sqlbridge -v -e MYSQL -t 'com.mysql' -d 'db=autobahn user=root'
+  - sqlbridge -v -e PG -t 'com.pg' -d 'dbname=autobahn host=127.0.0.1 user=postgres'
 # command to run tests
-script: nosetests
+script:
+  - nosetests
+  - sqlcmd -v -c operation -t 'com.pg' -q 'insert into login (password,fullname,login,tzname)values(%(p)s,%(f)s,%(l)s,%(t)s)' -a '{"p":"123test","f":"New User","l":"noob3","t":"America/Chicago"}'
 branches:
   only:
     - master
