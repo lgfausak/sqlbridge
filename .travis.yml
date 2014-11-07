@@ -11,9 +11,9 @@ before_script:
   - mysql -e 'create database autobahn;'
   - psql -c 'create database autobahn' -U postgres
   - psql -c 'create table login (id SERIAL, login TEXT UNIQUE, fullname TEXT, password TEXT, tzname TEXT, PRIMARY KEY (id))' -U postgres autobahn
-  - sqlrouter
-  - sqlbridge -v -e MYSQL -t 'com.mysql' -d 'db=autobahn user=root'
-  - sqlbridge -v -e PG -t 'com.pg' -d 'dbname=autobahn host=127.0.0.1 user=postgres'
+  - sqlrouter &
+  - sqlbridge -v -e MYSQL -t 'com.mysql' -d 'db=autobahn user=root' &
+  - sqlbridge -v -e PG -t 'com.pg' -d 'dbname=autobahn host=127.0.0.1 user=postgres' &
 # command to run tests
 script:
   - nosetests
