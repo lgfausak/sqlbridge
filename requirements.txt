@@ -1,5 +1,4 @@
-nose
-Twisted-Core==13.2.0
+Twisted>=13.1.0
 autobahn==0.9.2
 psycopg2==2.5.4
 six==1.8.0
