@@ -1,7 +1,17 @@
 language: python
+services:
+  - mysql
 python:
   - "2.7"
 # command to install dependencies
 install: "pip install -r requirements.txt"
+before_script:
+  - mysql -e 'create database autobahn;'
+  - psql -c 'create database autobahn' -U postgres
 # command to run tests
 script: nosetests
+branches:
+  only:
+    - master
+addons:
+  postgresql: "9.3"
