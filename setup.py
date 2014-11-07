@@ -78,7 +78,7 @@ setup(
    ## http://pypi.python.org/pypi?%3Aaction=list_classifiers
    ##
    classifiers = ["License :: OSI Approved :: Apache Software License",
-                  "Development Status :: 2 - Pre-Alpha",
+                  "Development Status :: 4 - Beta",
                   "Environment :: No Input/Output (Daemon)",
                   "Framework :: Twisted",
                   "Intended Audience :: Developers",
@@ -97,5 +97,5 @@ setup(
                   "Topic :: Software Development :: Libraries",
                   "Topic :: Software Development :: Libraries :: Python Modules",
                   "Topic :: Software Development :: Object Brokering"],
-   keywords = 'autobahn websocket wamp rpc pubsub twisted database'
+   keywords = 'autobahn websocket wamp rpc pubsub twisted database sql postgres mysql sqlite'
 )

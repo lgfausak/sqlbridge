@@ -8,7 +8,7 @@ A simple database access component for Autobahn. This component builds bridges t
 them accessible to Autobahn via topics.  The component can be used in its raw form to build custom
 Autobahn deployments, or, the convenience scripts that haver been included can be used to
 connect an sqlbridge to an already operating Autobahn router.  There are three test scripts included in
-this distrubution, sqlrouter, sqlbridge and sqlcmd. Brief documentation for each follows. The service
+this distribution, sqlrouter, sqlbridge and sqlcmd. Brief documentation for each follows. The service
 concept here is (in beautiful ascii art):
 
 ```
@@ -22,9 +22,11 @@ Before sqlcmd (or any client wanting to access the database) can run, first you 
 * A database (postgres, mysql, sqlite).  Installation and feeding beyond the scope
 of this documentation.  One thing to note, the database need not be installed
 on the sqlbridge client, as long as the sqlbridge client can reach it
-via whatever connection mechanism the db server supports.
+via whatever connection mechanism the db server supports. For demonstration purposes you
+can just use the sqlite driver, which will create a database on the fly.
 * An Autobahn router to connect to.  This can be any router that allows either unchallenged
-connectivity, or, wampcra connectivity.
+connectivity, or, wampcra connectivity. For demonstration purposes there is an included
+sqlrouter script.
 * Once the above two are satisfied, then sqlbridge can be fired up, connecting the Autobahn
 router to the db server.
 * Finally, once the above three are done, then sqlcmd (or any client) can query
@@ -46,8 +48,9 @@ optional arguments:
                        "unix:/tmp/mywebsocket".
 ```
 
+Demonstration mode:
 ```sh
-sqlrouter --endpoint tcp:8080
+sqlrouter --endpoint tcp:8080 &
 ```
 
 ## sqlbridge
@@ -100,6 +103,7 @@ valid topic_root would be the registration root.  As an example we can use 'com.
 what this does is set up the rpc with a prefix of com.db, and calls named:
 connect, disconnect, query, operation, watch for the database engine. A complete example:
 
+Demonstration mode (note, your -d (dsn) argument will certainly be different, except maybe for SQLITE):
 ```sh
 sqlbridge -v -e PG -t 'com.db' -d 'dbname=autobahn host=192.168.200.230 user=autouser'
 or
@@ -158,6 +162,9 @@ optional arguments:
                         in json format here, default is a blank dictionary :
                         {}
 ```
+
+Sqlcmd is only meant as an example of how you run queries.  It is expected that
+someone using the sqlbridge would put queries directly in their components.
 
 ### Generic Postgres examples
 
