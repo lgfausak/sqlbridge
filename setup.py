@@ -66,6 +66,7 @@ setup(
       'console_scripts': [
          'sqlbridge = sqlbridge.scripts.cli:run',
          'sqlcmd = sqlbridge.scripts.client:run',
+         'sqlrouter = sqlbridge.scripts.basicrouter:run',
       ]},
    packages = find_packages(),
    include_package_data = True,

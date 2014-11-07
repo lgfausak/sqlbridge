@@ -7,14 +7,14 @@ SQL Bridge for Autobahn
 A simple database access component for Autobahn. This component builds bridges to database backends making
 them accessible to Autobahn via topics.  The component can be used in its raw form to build custom
 Autobahn deployments, or, the convenience scripts that haver been included can be used to
-connect an sqlbridge to an already operating Autobahn router.  There are two test scripts included in
-this distrubution, sqlbridge and sqlcmd. Brief documentation for each follows. The service
+connect an sqlbridge to an already operating Autobahn router.  There are three test scripts included in
+this distrubution, sqlrouter, sqlbridge and sqlcmd. Brief documentation for each follows. The service
 concept here is (in beautiful ascii art):
 
 ```
 +--------+      +----------+      +-----------+      +---------+
-| sqlcmd |<---->| Autobahn |<---->| sqlbridge |<---->| your db |
-| client |      | Router   |      |  client   |      | server  |
+| sqlcmd |<---->| sqlrouter|<---->| sqlbridge |<---->| your db |
+| client |      | router   |      |  client   |      | server  |
 +--------+      +----------+      +-----------+      +---------+
 ```
 
@@ -30,6 +30,25 @@ router to the db server.
 * Finally, once the above three are done, then sqlcmd (or any client) can query
 the db server via the sqlbridge.
 So without further ado...
+
+## sqlrouter
+
+This is basically copied from the Autobahn examples wamp directory. It is a very basicrouter.
+Its only purpose is to help with the demonstration of sqlbridge.
+
+```
+usage: sqlrouter [-h] [-d] [--endpoint ENDPOINT]
+
+optional arguments:
+  -h, --help           show this help message and exit
+  -d, --debug          Enable debug output.
+  --endpoint ENDPOINT  Twisted server endpoint descriptor, e.g. "tcp:8080" or
+                       "unix:/tmp/mywebsocket".
+```
+
+```sh
+sqlrouter --endpoint tcp:8080
+```
 
 ## sqlbridge
 
