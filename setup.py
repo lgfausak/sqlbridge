@@ -73,7 +73,7 @@ setup(
    package_data = {
        "sqlbridge": [ "LICENSE", ]
    },
-   #data_files = [('.', ['sqlbridge/LICENSE'])],
+   #data_files = [('.', ['sqlbridge/webpages/sa.html'])],
    zip_safe = True,
    ## http://pypi.python.org/pypi?%3Aaction=list_classifiers
    ##
