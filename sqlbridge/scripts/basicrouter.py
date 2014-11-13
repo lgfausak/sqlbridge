@@ -44,9 +44,8 @@ class ParentGroup(Resource):
         return Resource.getChild(self, name, request)
 
     def render_GET(self, request):
-        print "PREPATH: " + str(request.prepath)
-        print "POSTPATH: " + str(request.postpath)
         if 'index.html' in request.postpath:
+            request.setHeader('content-type', 'text/html')
             return '''
 <html>
 <head>
@@ -147,7 +146,11 @@ function doit() {
 </html>
         ''' % ( self.args.wsocket, self.args.realm, self.args.topic_base, )
         elif 'autobahn.min.js' in request.postpath:
-            return '''
+            request.setHeader('content-type', 'application/javascript')
+            #f = open('/home/gfausak/git/sqlbridge/c.js', 'r')
+            #fr = f.read()
+            #f.close()
+            return r'''
 /*
 
  Counter block mode compatible with  Dr Brian Gladman fileenc.c
