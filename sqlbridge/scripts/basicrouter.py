@@ -178,6 +178,8 @@ def run():
     server = serverFromString(reactor, args.endpoint)
     server.listen(transport_factory)
 
+    # create a web server that serves up exactly one page, the javascript demo
+    # that page will have the correct ports, ips, realms, etc.
     resource = DemoJavascriptPage(args)
     factory = Site(resource)
     reactor.listenTCP(args.port, factory)
