@@ -33,6 +33,15 @@ from twisted.internet.defer import inlineCallbacks, returnValue
 
 from .dbbase import dbbase
 
+def dict_factory(cursor, row):
+    d = {}
+    for idx, col in enumerate(cursor.description):
+        d[col[0]] = row[idx]
+    return d
+ 
+def set_dict_factory(conn):
+    conn.row_factory = dict_factory
+
 class SQLITE3_3_8_2(dbbase):
     """
     basic sqlite3 3.8.2 driver
@@ -59,18 +68,23 @@ class SQLITE3_3_8_2(dbbase):
     #  MACHINE is the ip address or dns name of the machine
     #  DBUSER is the user to connect as
     #
+
     def connect(self,*args,**kwargs):
         log.msg("SQLITE3_3_8_2:connect({},{})".format(args,kwargs))
         self.dsn = args[0]
         # there must be an easier way.
         # this converts db=x host=y shatever=z to a dictionary.
         try:
-            self.conn = adbapi.ConnectionPool("sqlite3",**dict(s.split('=') for s in self.dsn.split()))
+            md = dict(s.split('=') for s in self.dsn.split())
+            md['cp_openfun'] = set_dict_factory
+            #self.conn = adbapi.ConnectionPool("sqlite3",**dict(s.split('=') for s in self.dsn.split()))
+            self.conn = adbapi.ConnectionPool("sqlite3",**dict(md))
             log.msg("SQLITE3_3_8_2:connect() established")
         except Exception as err:
             log.msg("SQLITE3_3_8_2:connect({}),error({})".format(self.dsn,err))
             raise err
         return
+ 
 
     #
     # disconnect
