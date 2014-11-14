@@ -17,6 +17,8 @@
 ###############################################################################
 
 from __future__ import absolute_import
+import os
+from os.path import join
 
 import sys
 import platform
@@ -73,9 +75,8 @@ setup(
    packages = find_packages(),
    include_package_data = True,
    package_data = {
-       "sqlbridge": [ "LICENSE", ]
+       "sqlbridge": [ "config/*.conf", "LICENSE" ]
    },
-   #data_files = [('.', ['sqlbridge/webpages/sa.html'])],
    zip_safe = True,
    ## http://pypi.python.org/pypi?%3Aaction=list_classifiers
    ##
