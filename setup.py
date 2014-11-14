@@ -18,6 +18,7 @@
 
 from __future__ import absolute_import
 import os
+from glob import glob
 from os.path import join
 
 import sys
@@ -75,8 +76,9 @@ setup(
    packages = find_packages(),
    include_package_data = True,
    package_data = {
-       "sqlbridge": [ "config/*.conf", "LICENSE" ]
+       ".": [ "LICENSE", glob('*.conf') ]
    },
+   data_files=[('config', ['sqlbridge/*.conf'])],
    zip_safe = True,
    ## http://pypi.python.org/pypi?%3Aaction=list_classifiers
    ##
