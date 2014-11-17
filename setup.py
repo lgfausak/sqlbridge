@@ -76,9 +76,9 @@ setup(
    packages = find_packages(),
    include_package_data = True,
    package_data = {
-       ".": [ "LICENSE", glob('*.conf') ]
+       ".": [ "LICENSE" ]
    },
-   data_files=[('config', ['sqlbridge/*.conf'])],
+   data_files=[('config', glob('config/*.conf'))],
    zip_safe = True,
    ## http://pypi.python.org/pypi?%3Aaction=list_classifiers
    ##
