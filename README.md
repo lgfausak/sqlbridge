@@ -33,6 +33,78 @@ router to the db server.
 the db server via the sqlbridge.
 So without further ado...
 
+## Quick Install
+You can just try this:
+```
+sudo pip install sqlbridge
+WANIP=W.X.Y.Z taskforce -r /var/local/sqlbridge/roles.conf -f /var/local/sqlbridge/sqlbridge.conf
+```
+
+The WANIP is only important for demo mode.  It sets up a web page which can be accessed from your broswer like:
+
+```
+http://W.X.Y.Z:8000/index.html
+```
+
+This is a very simple web page which sends queries and displays results.  Note, the same IP address you would use in your browser would
+also be used for the WANIP declaration.
+
+The demo mode creates a blank sqlite3 database in the /tmp directory.  The web page gives you access to the database. For
+example, you could run these commands:
+
+```
+type: query
+query: create table mytable ( name varchar(255) )
+```
+
+```
+type: query
+query: insert into mytable (name) values ('Mary')
+```
+
+```
+type: query
+query: insert into mytable (name) values ('Greg')
+```
+
+```
+type: query
+query: select * from mytable
+```
+
+The last query will return the two tuples you just inserted into mytable.  The demonstration supports mysql and postgres, however,
+installing these and configuring them is going to be up to you.  Once installed and configured, there are two things needed to access
+them.  First, you will need to change the roles.conf file.  If you look in there a single line says 'sqlite'.  Simply change that to
+'postgres' or 'mysql'.  Second, the sqlbridge.conf file has the dsn necessary to access the postgres or mysql database.  The relevant
+section looks like this:
+
+```
+        "sqlbridge": {
+            "role_defines": {
+                "sqlite": {
+                    "engine": "SQLITE",
+                    "dsn": "database=/tmp/autobahn.sq"
+                },
+                "postgres": {
+                    "engine": "PG",
+                    "dsn": "dbname=autobahn host={LANIP} user=autouser"
+                },
+                "mysql": {
+                    "engine": "MYSQL",
+                    "dsn": "db=test user=mysql"
+                }
+            }
+        }
+```
+
+In this example, if the postgres role was specified, and there was a postgres installation on the same machine with a database called
+autobahn, and a user called autouser, the sqlbridge would connect.  Similar comments for mysql. Also, where sqlite3 only supports
+'query' operations, mysql and postgres support the idea of 'query' (a command that returns data) and 'operation' (a command
+like create table that doesn't return data).  It is important to call the correct one.  If your query returns data, the type is 'query',
+otherwise the type is 'operation'.
+
+One further note, postgres supports 'watch'.  My simple javascript page doesn't at this time (although my sqlcmd script does).
+
 ## sqlrouter
 
 This is basically copied from the Autobahn examples wamp directory. It is a very basicrouter.

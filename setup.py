@@ -78,7 +78,7 @@ setup(
    package_data = {
        ".": [ "LICENSE" ]
    },
-   data_files=[('taskforce', glob('config/*.conf'))],
+   data_files=[('/var/local/sqlbridge', glob('config/*.conf'))],
    zip_safe = True,
    ## http://pypi.python.org/pypi?%3Aaction=list_classifiers
    ##
