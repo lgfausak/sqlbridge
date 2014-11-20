@@ -1,5 +1,5 @@
 # sqlbridge - Autobahn Database Service
-[![Version](https://pypip.in/version/sqlbridge/badge.svg)![Status](https://pypip.in/status/sqlbridge/badge.svg)![Downloads](https://pypip.in/download/sqlbridge/badge.svg)](https://pypi.python.org/pypi/sqlbridge/)
+[![Version](https://pypip.in/version/sqlbridge/badge.svg)![Status](https://pypip.in/status/sqlbridge/badge.svg)![Downloads](https://pypip.in/download/sqlbridge/badge.svg)![Build](https://travis-ci.org/lgfausak/sqlbridge.svg?branch=master)](https://pypi.python.org/pypi/sqlbridge/)
 
 
 SQL Bridge for Autobahn
