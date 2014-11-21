@@ -279,5 +279,7 @@ class PG9_4(dbbase):
             "topic_base":self.topic_base,
             "debug":self.debug
         }]
+
         returnValue(rv)
+
         return

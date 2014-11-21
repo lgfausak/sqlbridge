@@ -59,8 +59,49 @@ var connection = new autobahn.Connection({
          realm: '%s'
       });
 
+var topic_root = '%s';
 connection.onopen = function (session) {
    my_session = session;
+   my_session.call(topic_root + '.info', [ '', [] ] ).then(
+      function (res) {
+         console.log("Info:", res);
+         if(res) {
+            tbtext = "<table>";
+            tbtext += "<theader>";
+            ri = res[0]
+            for(j in ri) {
+               if(!ri.hasOwnProperty(j)) {
+                  continue;
+               }
+               tbtext += "<th>";
+               tbtext += j;
+               tbtext += "</th>";
+            }
+            tbtext += "</theader>";
+            tbtext += "<tbody>";
+            for(i = 0; i < res.length; i++) {
+              ri = res[i];
+              tbtext += "<tr>";
+              for(j in ri) {
+                 if(!ri.hasOwnProperty(j)) {
+                    continue;
+                 }
+                 tbtext += "<td>";
+                 tbtext += ri[j];
+                 tbtext += "</td>";
+              }
+              tbtext += "</tr>";
+            }
+            tbtext += "</tbody>";
+            tbtext += "</table>";
+            document.getElementById("info").innerHTML = tbtext;
+         }
+      },
+      function(error) {
+         console.log(JSON.stringify(error));
+         document.getElementById("info").innerHTML = "Error : " + JSON.stringify(error);
+      }
+   )
 };
 
 connection.open();
@@ -75,7 +116,7 @@ function doit() {
 
    console.log("run query ", query);
 
-   abcall = '%s.' + document.getElementById("abcall").value;
+   abcall = topic_root + '.' + document.getElementById("abcall").value;
 
    my_session.call(abcall, [ query, args ] ).then(
       function (res) {
@@ -127,6 +168,7 @@ function doit() {
 </head>
 <body>
 <form name="f1">
+  <p>Connection Info: <div id="info"></div></p>
   <p>type:
   <select id="abcall">
     <option value="query">query (results are expected, like select)</option>>
@@ -148,9 +190,6 @@ function doit() {
         ''' % ( self.args.wsocket, self.args.realm, self.args.topic_base, )
         elif 'autobahn.min.js' in request.postpath:
             request.setHeader('content-type', 'application/javascript')
-            #f = open('/home/gfausak/git/sqlbridge/c.js', 'r')
-            #fr = f.read()
-            #f.close()
             return r'''
 /*
 
