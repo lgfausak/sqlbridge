@@ -55,17 +55,17 @@ The demo mode creates a blank sqlite3 database in the /tmp directory.  The web p
 example, you could run these commands:
 
 ```
-type: query
+type: operation
 query: create table mytable ( name varchar(255) )
 ```
 
 ```
-type: query
+type: operation
 query: insert into mytable (name) values ('Mary')
 ```
 
 ```
-type: query
+type: operation
 query: insert into mytable (name) values ('Greg')
 ```
 
