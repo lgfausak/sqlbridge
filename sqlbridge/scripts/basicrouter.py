@@ -132,6 +132,7 @@ function doit() {
     <option value="query">query (results are expected, like select)</option>>
     <option value="operation">operation (no results expected, like delete from)</option>>
     <option value="watch">watch (only valid for postgres databases)</option>>
+    <option value="info">info (information about the database engine)</option>>
   </select></p>
   <p>query: <textarea rows="6" cols="60" id="query" name="query"></textarea></p>
   <p>args (json format): <input size="60" id="args" name="args" type="text"/>  </p>

@@ -51,6 +51,8 @@ class SQLITE3_3_8_2(dbbase):
         if debug is not None and debug:
             log.startLogging(sys.stdout)
         log.msg("SQLITE3_3_8_2:__init__()")
+        self.engine_version = "SQLITE3_3_8_2"
+        self.engine = "SQLITE"
         self.conn = None
         self.dsn = None
         self.topic_base = topic_base
@@ -171,4 +173,21 @@ class SQLITE3_3_8_2(dbbase):
 
     def watch(self,*args,**kwargs):
         raise Exception("sqlite3 is trying to add watch, can only do this in postgres")
+        return
+    #
+    # info:
+    #  return information about this connection
+    #
+
+    @inlineCallbacks
+    def info(self,*args,**kwargs):
+        log.msg("SQLITE3_3_8_2:info({},{})".format(args,kwargs))
+        rv = yield [{
+            "engine":self.engine,
+            "engine_version":self.engine_version,
+            "dsn":self.dsn,
+            "topic_base":self.topic_base,
+            "debug":self.debug
+        }]
+        returnValue(rv)
         return

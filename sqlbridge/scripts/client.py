@@ -120,6 +120,10 @@ class Component(ApplicationSession):
             elif self.svar['db_call'] == 'operation':
                 log.msg("db:onJoin operation(SUCCESS)")
                 dcon = True
+            elif self.svar['db_call'] == 'info':
+                log.msg("db:onJoin info(SUCCESS)")
+                print("{}").format(json.dumps(rv,indent=4))
+                dcon = True
             elif self.svar['db_call'] == 'watch':
                 log.msg("db:onJoin watch(SUCCESS) : subscribing to: {}".format(rv))
                 rv = yield self.subscribe(self.watch_callback_function, rv)

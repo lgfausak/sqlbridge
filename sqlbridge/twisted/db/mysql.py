@@ -41,6 +41,8 @@ class MYSQL14_14(dbbase):
         if debug is not None and debug:
             log.startLogging(sys.stdout)
         log.msg("MYSQL14_14:__init__()")
+        self.engine_version = "MYSQL14_14"
+        self.engine = "MYSQL"
         self.conn = None
         self.dsn = None
         self.topic_base = topic_base
@@ -157,4 +159,22 @@ class MYSQL14_14(dbbase):
 
     def watch(self,*args,**kwargs):
         raise Exception("mysql is trying to add watch, can only do this in postgres ")
+        return
+
+    #
+    # info:
+    #  return information about this connection
+    #
+
+    @inlineCallbacks
+    def info(self,*args,**kwargs):
+        log.msg("MYSQL14_14:info({},{})".format(args,kwargs))
+        rv = yield [{
+            "engine":self.engine,
+            "engine_version":self.engine_version,
+            "dsn":self.dsn,
+            "topic_base":self.topic_base,
+            "debug":self.debug
+        }]
+        returnValue(rv)
         return

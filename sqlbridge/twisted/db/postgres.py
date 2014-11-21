@@ -70,6 +70,8 @@ class PG9_4(dbbase):
             log.startLogging(sys.stdout)
 
         log.msg("PG9_4:__init__()")
+        self.engine_version = "PG9_4"
+        self.engine = "PG"
         self.conn = None
         self.dsn = None
         self.d = None
@@ -262,3 +264,20 @@ class PG9_4(dbbase):
 
         return
 
+    #
+    # info:
+    #  return information about this connection
+    #
+
+    @inlineCallbacks
+    def info(self,*args,**kwargs):
+        log.msg("PG9_4:info({},{})".format(args,kwargs))
+        rv = yield [{
+            "engine":self.engine,
+            "engine_version":self.engine_version,
+            "dsn":self.dsn,
+            "topic_base":self.topic_base,
+            "debug":self.debug
+        }]
+        returnValue(rv)
+        return

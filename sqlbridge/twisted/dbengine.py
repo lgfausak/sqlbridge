@@ -116,6 +116,7 @@ class DB(ApplicationSession):
         self.db['registration']['query'] = yield self.register(dbo.query, self.svar['topic_base']+'.query',r)
         self.db['registration']['operation'] = yield self.register(dbo.operation, self.svar['topic_base']+'.operation',r)
         self.db['registration']['watch'] = yield self.register(dbo.watch, self.svar['topic_base']+'.watch',r)
+        self.db['registration']['info'] = yield self.register(dbo.info, self.svar['topic_base']+'.info',r)
 
         if 'dsn' in self.svar:
             log.msg("db:onJoin connecting... {}".format(self.svar['dsn']))
@@ -132,6 +133,7 @@ class DB(ApplicationSession):
         yield self.db['registration']['query'].unregister()
         yield self.db['registration']['operation'].unregister()
         yield self.db['registration']['watch'].unregister()
+        yield self.db['registration']['info'].unregister()
 
         del self.db
 

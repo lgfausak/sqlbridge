@@ -103,3 +103,12 @@ class dbbase(object):
     def watch(self,s,a):
         pass
 
+    #
+    # info:
+    #  this returns information about the current database connection
+    #
+
+    @abstractmethod
+    def info(self,s,a):
+        pass
+
