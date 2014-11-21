@@ -60,39 +60,29 @@ var connection = new autobahn.Connection({
       });
 
 var topic_root = '%s';
+
 connection.onopen = function (session) {
+   console.log('connection.onopen: isConnected ', connection.isConnected);
    my_session = session;
    my_session.call(topic_root + '.info', [ '', [] ] ).then(
       function (res) {
          console.log("Info:", res);
          if(res) {
-            tbtext = "<table>";
-            tbtext += "<theader>";
+            tbtext = "<table border=1 border-width=1>";
             ri = res[0]
             for(j in ri) {
                if(!ri.hasOwnProperty(j)) {
                   continue;
                }
-               tbtext += "<th>";
+               tbtext += "<tr>";
+               tbtext += "<td>";
                tbtext += j;
-               tbtext += "</th>";
+               tbtext += "</td>";
+               tbtext += "<td>";
+               tbtext += ri[j];
+               tbtext += "</td>";
+               tbtext += "</tr>";
             }
-            tbtext += "</theader>";
-            tbtext += "<tbody>";
-            for(i = 0; i < res.length; i++) {
-              ri = res[i];
-              tbtext += "<tr>";
-              for(j in ri) {
-                 if(!ri.hasOwnProperty(j)) {
-                    continue;
-                 }
-                 tbtext += "<td>";
-                 tbtext += ri[j];
-                 tbtext += "</td>";
-              }
-              tbtext += "</tr>";
-            }
-            tbtext += "</tbody>";
             tbtext += "</table>";
             document.getElementById("info").innerHTML = tbtext;
          }
@@ -102,6 +92,17 @@ connection.onopen = function (session) {
          document.getElementById("info").innerHTML = "Error : " + JSON.stringify(error);
       }
    )
+};
+
+connection.onclose = function (session) {
+    console.log('Session to database closed', connection);
+    console.log('Session', session);
+    console.log('isRetrying ', connection.isRetrying);
+    if(connection.isRetrying == true) {
+        document.getElementById("info").innerHTML = '<p>Autobahn Connection Closed (retrying)</p>';
+    } else {
+        document.getElementById("info").innerHTML = '<p>Autobahn Connection Closed</p>';
+    };
 };
 
 connection.open();
@@ -167,24 +168,53 @@ function doit() {
 </script>
 </head>
 <body>
-<form name="f1">
-  <p>Connection Info: <div id="info"></div></p>
-  <p>type:
-  <select id="abcall">
-    <option value="query">query (results are expected, like select)</option>>
-    <option value="operation">operation (no results expected, like delete from)</option>>
-    <option value="watch">watch (only valid for postgres databases)</option>>
-    <option value="info">info (information about the database engine)</option>>
-  </select></p>
-  <p>query: <textarea rows="6" cols="60" id="query" name="query"></textarea></p>
-  <p>args (json format): <input size="60" id="args" name="args" type="text"/>  </p>
-  <p><input value="Go" type="button" onclick='JavaScript:doit()'/></p>
+  <table>
+    <form name="f1">
+      <tr>
+        <td colspan="2">
+          Connection : <div id="info"></div>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          type
+        </td>
+        <td>
+          <select id="abcall">
+            <option value="query">query (results are expected, like select)</option>>
+            <option value="operation">operation (no results expected, like delete from)</option>>
+            <option value="watch">watch (only valid for postgres databases)</option>>
+          </select>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          query
+        </td>
+        <td>
+          <textarea rows="6" cols="60" id="query" name="query"></textarea>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          args (json format)
+        </td>
+        <td>
+          <input size="60" id="args" name="args" type="text"/>
+        </td>
+      </tr>
+      <tr>
+        <td colspan="2" align="center">
+          <input value="Go" type="button" onclick='JavaScript:doit()'/>
+        </td>
+      </tr>
+    </form>
+  </table>
   <hr/>
-  <div id="rpc"></div>
+  <div id="rpc">Remote Call</div>
   <hr/>
-  <div id="result"></div>
+  <div id="result">Formatted Query Result</div>
   <hr/>
-</form>
 </body>
 </html>
         ''' % ( self.args.wsocket, self.args.realm, self.args.topic_base, )
