@@ -94,8 +94,9 @@ connection.onopen = function (session) {
    )
 };
 
-connection.onclose = function (details) {
+connection.onclose = function (reason,details) {
     console.log('Session to database closed', connection);
+    console.log('Reason to database closed', reason);
     console.log('Details to database closed', details);
     console.log('Connection to database closed', connection);
     console.log('will_retry ', details.will_retry);
