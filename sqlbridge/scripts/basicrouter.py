@@ -96,7 +96,7 @@ connection.onopen = function (session) {
 
 connection.onclose = function (details) {
     console.log('Session to database closed', connection);
-    console.log('will_retry ', details.isRetrying);
+    console.log('will_retry ', details.will_retry);
     if(details.will_retry == true) {
         document.getElementById("info").innerHTML = '<p>Autobahn Connection Closed (retrying)</p>';
     } else {
