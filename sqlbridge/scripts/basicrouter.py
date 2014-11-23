@@ -94,11 +94,10 @@ connection.onopen = function (session) {
    )
 };
 
-connection.onclose = function (session) {
+connection.onclose = function (details) {
     console.log('Session to database closed', connection);
-    console.log('Session', session);
-    console.log('isRetrying ', connection.isRetrying);
-    if(connection.isRetrying == true) {
+    console.log('will_retry ', details.isRetrying);
+    if(details.will_retry == true) {
         document.getElementById("info").innerHTML = '<p>Autobahn Connection Closed (retrying)</p>';
     } else {
         document.getElementById("info").innerHTML = '<p>Autobahn Connection Closed</p>';
