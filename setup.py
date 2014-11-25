@@ -64,7 +64,7 @@ setup(
    extras_require = {
       ## Twisted/txpostgres needed for PostgreSQL support
       ## mysql needs the python import libraries
-      'postgres': ['txpostgres>=1.2.0'],
+      'postgres': ['txpostgres>=1.2.0','psycopg2>=2.5.4'],
       'mysql': ['MySQL-python>=1.2.3'],
    },
    entry_points = {
