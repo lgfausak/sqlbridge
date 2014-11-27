@@ -148,6 +148,9 @@ class PG9_4(dbbase):
                 log.msg("PG9_4:query().running({} with args {})".format(s,a))
                 log.msg("PG9_4:query().details.caller {}".format(kwargs['details'].caller))
                 log.msg("PG9_4:query().details.authid {}".format(kwargs['details'].authid))
+                log.msg("PG9_4:query().details.authrole {}".format(kwargs['details'].authrole))
+                log.msg("PG9_4:query().details.authmethod {}".format(kwargs['details'].authmethod))
+                log.msg("PG9_4:query().details.caller_transport {}".format(kwargs['details'].caller_transport))
                 if 'details' in kwargs and kwargs['details'].authid is not None:
                     details = kwargs['details']
                     log.msg("details.authid {}".format(details.authid))
