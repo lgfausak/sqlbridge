@@ -162,9 +162,11 @@ class PG9_4(dbbase):
                     # set to create an audit trail
                     @inlineCallbacks
                     def interaction(cur):
-                        yield cur.execute("select * from private.set_session(%(session_id)s)",
+                        iv = yield cur.execute("select * from private.set_session(%(session_id)s)",
                             {'session_id':int(details.caller)})
+                        log.msg("PG9_4:iv {}".format(iv))
                         rv = yield cur.execute(s, a)
+                        log.msg("PG9_4:rv {}".format(rv))
                         returnValue(rv.fetchall())
                         return
                     rv = yield self.conn.runInteraction(interaction)
