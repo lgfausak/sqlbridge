@@ -146,7 +146,9 @@ class PG9_4(dbbase):
         if self.conn:
             try:
                 log.msg("PG9_4:query().running({} with args {})".format(s,a))
-                if 'details' in kwargs and kwargs['details'].authid is not None:
+                log.msg("PG9_4:query().details.caller {}".format(kwargs['details'].caller))
+                log.msg("PG9_4:query().details.authid {}".format(kwargs['details'].authid))
+                if 'details' in kwargs and kwargs['details'].caller is not None:
                     details = kwargs['details']
                     log.msg("details.authid {}".format(details.authid))
                     log.msg("details.caller {}".format(details.caller))
