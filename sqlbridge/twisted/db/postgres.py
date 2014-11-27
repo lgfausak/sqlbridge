@@ -151,9 +151,8 @@ class PG9_4(dbbase):
                 log.msg("PG9_4:query().details.authrole {}".format(kwargs['details'].authrole))
                 log.msg("PG9_4:query().details.authmethod {}".format(kwargs['details'].authmethod))
                 log.msg("PG9_4:query().details.caller_transport {}".format(kwargs['details'].caller_transport))
-                if 'details' in kwargs and kwargs['details'].authid is not None:
+                if 'details' in kwargs and kwargs['details'].caller is not None:
                     details = kwargs['details']
-                    log.msg("details.authid {}".format(details.authid))
                     log.msg("details.caller {}".format(details.caller))
 
                     # we run an interaction to keep together the
