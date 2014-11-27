@@ -111,12 +111,12 @@ class DB(ApplicationSession):
         self.db['registration'] = {}
 
         r = types.RegisterOptions(details_arg = 'details')
-        self.db['registration']['connect'] = yield self.register(dbo.connect, self.svar['topic_base']+'.connect',r)
-        self.db['registration']['disconnect'] = yield self.register(dbo.disconnect, self.svar['topic_base']+'.disconnect',r)
-        self.db['registration']['query'] = yield self.register(dbo.query, self.svar['topic_base']+'.query',r)
-        self.db['registration']['operation'] = yield self.register(dbo.operation, self.svar['topic_base']+'.operation',r)
-        self.db['registration']['watch'] = yield self.register(dbo.watch, self.svar['topic_base']+'.watch',r)
-        self.db['registration']['info'] = yield self.register(dbo.info, self.svar['topic_base']+'.info',r)
+        self.db['registration']['connect'] = yield self.register(dbo.connect, self.svar['topic_base']+'.connect', options = r)
+        self.db['registration']['disconnect'] = yield self.register(dbo.disconnect, self.svar['topic_base']+'.disconnect', options = r)
+        self.db['registration']['query'] = yield self.register(dbo.query, self.svar['topic_base']+'.query', options = r)
+        self.db['registration']['operation'] = yield self.register(dbo.operation, self.svar['topic_base']+'.operation', options = r)
+        self.db['registration']['watch'] = yield self.register(dbo.watch, self.svar['topic_base']+'.watch', options = r)
+        self.db['registration']['info'] = yield self.register(dbo.info, self.svar['topic_base']+'.info', options = r)
 
         if 'dsn' in self.svar:
             log.msg("db:onJoin connecting... {}".format(self.svar['dsn']))
