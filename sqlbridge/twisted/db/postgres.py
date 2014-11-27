@@ -164,9 +164,11 @@ class PG9_4(dbbase):
                     def interaction(cur):
                         iv = yield cur.execute("select * from private.set_session(%(session_id)s)",
                             {'session_id':int(details.caller)})
-                        log.msg("PG9_4:iv {}".format(iv))
+                        ivf = iv.fetchall()
+                        log.msg("PG9_4:iv {}".format(ivf))
                         rv = yield cur.execute(s, a)
-                        log.msg("PG9_4:rv {}".format(rv))
+                        rvf = rv.fetchall()
+                        log.msg("PG9_4:rv {}".format(rvf))
                         returnValue(rv.fetchall())
                         return
                     rv = yield self.conn.runInteraction(interaction)
