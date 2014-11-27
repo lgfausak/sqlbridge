@@ -169,7 +169,7 @@ class PG9_4(dbbase):
                         rv = yield cur.execute(s, a)
                         rvf = rv.fetchall()
                         log.msg("PG9_4:rv {}".format(rvf))
-                        returnValue(rv.fetchall())
+                        returnValue(rvf)
                         return
                     rv = yield self.conn.runInteraction(interaction)
                     returnValue(rv)
