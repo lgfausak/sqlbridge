@@ -170,9 +170,6 @@ class PG9_4(dbbase):
 
         # qsa contains an array of queries to run
         # asa contains an array of dicts as arguments for those queries
-
-        s = args[0]
-        a = args[1]
         if self.conn:
             try:
                 log.msg("PG9_4:query().details.caller {}".format(kwargs['details'].caller))
@@ -204,7 +201,13 @@ class PG9_4(dbbase):
                     return
 
                 rv = yield self.conn.runInteraction(interaction)
-                returnValue(rv)
+                # here is a convenience, if a single query is run (only one
+                # query in args[0]) then a single result is returned eliminating
+                # the need for an array of results.
+                if len(rv) == 1:
+                    returnValue(rv[0])
+                else:
+                    returnValue(rv)
             except Exception as err:
                 log.msg("PG9_4:query({}),error({})".format(s,err))
                 raise err
