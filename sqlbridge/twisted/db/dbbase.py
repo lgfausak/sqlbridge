@@ -112,3 +112,12 @@ class dbbase(object):
     def info(self,s,a):
         pass
 
+    #
+    # transaction:
+    #  this is an array of queries to run as an atomic unit
+    #
+
+    @abstractmethod
+    def transaction(self,s,a):
+        pass
+

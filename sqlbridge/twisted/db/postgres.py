@@ -24,7 +24,7 @@
 ###############################################################################
 
 from __future__ import absolute_import
-import sys,os,string,random
+import sys,os,string,random,types
 import six
 import psycopg2
 import psycopg2.extras
@@ -135,53 +135,82 @@ class PG9_4(dbbase):
     #  by its nature doesn't return any rows then don't use this call!
     #  for example, a query that says 'insert into table x (c) values(r)'
     #  by its nature it doesn't return a row, so, this isn't the right
-    #  method to use, use operation instead
+    #  method to use, use operation instead.
+    # note:
+    #  s and a can be arrays instead of single, in that case the entire
+    #  array is run as a single atomic transaction, they all work, or all fail.
+    #  further, a can be an array of length 1, in which case the same arguments
+    #  are used for all of the queries in s, otherwise, a must be an array of the
+    #  same length as s, which would indicate a separate set of arguments for
+    #  each of the queries in array s.
     #
 
     @inlineCallbacks
     def query(self,*args, **kwargs):
         log.msg("PG9_4:query() ARGS:{} KWARGS:{}".format(args, kwargs))
+        if len(args) < 1:
+            log.msg("PG9_4:query(), required to have at least one argument")
+            raise Exception("PG9_4:query(), required to have at least one argument")
+        qsa = args[0]
+        if isinstance(qsa, types.StringTypes):
+            qsa = [ args[0] ]
+        elif not isinstance(s,types.ListType):
+            log.msg("PG9_4:query(), first argument must be string or array of strings:{}".format(args[0]))
+            raise Exception("PG9_4:query(), first argument must be string or array of strings:{}".format(args[0]))
+        asa = []
+        if len(args) > 1:
+            asa = args[1]
+            if isinstance(asa, types.DictType):
+                asa = [ args[1] for i in range(len(qsa)) ]
+            elif not isinstance(s,types.ListType):
+                log.msg("PG9_4:query(), second argument must be dict or array of dicts:{}".format(args[1]))
+                raise Exception("PG9_4:query(), second argument must be dict or array of dicts:{}".format(args[1]))
+        else:
+            asa = [ {} for i in range(len(qsa)) ]
+
+        # qsa contains an array of queries to run
+        # asa contains an array of dicts as arguments for those queries
+
         s = args[0]
         a = args[1]
         if self.conn:
             try:
-                log.msg("PG9_4:query().running({} with args {})".format(s,a))
                 log.msg("PG9_4:query().details.caller {}".format(kwargs['details'].caller))
                 log.msg("PG9_4:query().details.authid {}".format(kwargs['details'].authid))
                 log.msg("PG9_4:query().details.authrole {}".format(kwargs['details'].authrole))
                 log.msg("PG9_4:query().details.authmethod {}".format(kwargs['details'].authmethod))
                 log.msg("PG9_4:query().details.caller_transport {}".format(kwargs['details'].caller_transport))
-                if 'details' in kwargs and kwargs['details'].caller is not None:
-                    details = kwargs['details']
-                    log.msg("details.caller {}".format(details.caller))
-
-                    # we run an interaction to keep together the
-                    # set_session_variable() with the 
-                    # query.  so, if stuff is deleted/updated/inserted
-                    # the auditing mechanisms have the authid
-                    # set to create an audit trail
-                    @inlineCallbacks
-                    def interaction(cur):
+                # we run an interaction to keep together the
+                # set_session_variable() with the 
+                # query.  so, if stuff is deleted/updated/inserted
+                # the auditing mechanisms have the authid
+                # set to create an audit trail
+                @inlineCallbacks
+                def interaction(cur):
+                    if 'details' in kwargs and kwargs['details'].caller is not None:
+                        details = kwargs['details']
                         iv = yield cur.execute("select * from private.set_session(%(session_id)s)",
                             {'session_id':int(details.caller)})
                         ivf = iv.fetchall()
                         log.msg("PG9_4:iv {}".format(ivf))
-                        rv = yield cur.execute(s, a)
+                    rsa = []
+                    for qi in range(len(qsa)):
+                        log.msg("PG9_4:query index {}:{}:{}".format(qi,qsa[qi],asa[qi]))
+                        rv = yield cur.execute(qsa[qi], asa[qi])
                         rvf = rv.fetchall()
                         log.msg("PG9_4:rv {}".format(rvf))
-                        returnValue(rvf)
-                        return
-                    rv = yield self.conn.runInteraction(interaction)
-                    returnValue(rv)
-                else:
-                    rv = yield self.conn.runQuery(s,a)
-                    returnValue(rv)
-                log.msg("PG9_4:query().results({})".format(rv))
+                        rsa.append(rvf)
+                    returnValue(rsa)
+                    return
+
+                rv = yield self.conn.runInteraction(interaction)
+                returnValue(rv)
             except Exception as err:
                 log.msg("PG9_4:query({}),error({})".format(s,err))
                 raise err
 
         # error here, probably should raise exception
+        log.msg("PG9_4:query() attempt, but there is no connection")
         return
 
     #
