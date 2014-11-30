@@ -154,7 +154,7 @@ class PG9_4(dbbase):
         qsa = args[0]
         if isinstance(qsa, types.StringTypes):
             qsa = [ args[0] ]
-        elif not isinstance(s,types.ListType):
+        elif not isinstance(qsa,types.ListType):
             log.msg("PG9_4:query(), first argument must be string or array of strings:{}".format(args[0]))
             raise Exception("PG9_4:query(), first argument must be string or array of strings:{}".format(args[0]))
         asa = []
