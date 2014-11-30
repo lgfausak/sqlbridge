@@ -162,7 +162,7 @@ class PG9_4(dbbase):
             asa = args[1]
             if isinstance(asa, types.DictType):
                 asa = [ args[1] for i in range(len(qsa)) ]
-            elif not isinstance(s,types.ListType):
+            elif not isinstance(asa,types.ListType):
                 log.msg("PG9_4:query(), second argument must be dict or array of dicts:{}".format(args[1]))
                 raise Exception("PG9_4:query(), second argument must be dict or array of dicts:{}".format(args[1]))
         else:
