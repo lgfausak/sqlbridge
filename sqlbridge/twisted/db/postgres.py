@@ -209,7 +209,7 @@ class PG9_4(dbbase):
                 else:
                     returnValue(rv)
             except Exception as err:
-                log.msg("PG9_4:query({}),error({})".format(s,err))
+                log.msg("PG9_4:query({}),error({})".format(qsa,err))
                 raise err
 
         # error here, probably should raise exception
