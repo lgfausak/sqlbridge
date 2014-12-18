@@ -60,7 +60,7 @@ setup(
    author_email = 'lgfausak@gmail.com',
    url = 'https://github.com/lgfausak/sqlbridge',
    platforms = 'Any',
-   install_requires = ['autobahn==0.9.2', 'twisted>=14.0.2', 'taskforce>=0.1.9'],
+   install_requires = ['autobahn==0.9.3', 'twisted>=14.0.2', 'taskforce>=0.1.9'],
    extras_require = {
       ## Twisted/txpostgres needed for PostgreSQL support
       ## mysql needs the python import libraries
